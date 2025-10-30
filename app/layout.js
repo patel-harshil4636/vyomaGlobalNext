@@ -10,6 +10,7 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+const BASE_URL = 'https://vyomaglobal.info';
 
 export const metadata = {
   metadataBase: new URL(BASE_URL),
