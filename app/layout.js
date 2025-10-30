@@ -16,6 +16,7 @@ export const metadata = {
   metadataBase: new URL(BASE_URL),
   title: "VyomaGlobal | Website & Branding Experts",
   description: "Grow your business online with VyomaGlobal — from design to deployment.",
+  
   openGraph: {
     title: "VyomaGlobal — Build Your Digital Future",
     description: "Transform your business with VyomaGlobal.",

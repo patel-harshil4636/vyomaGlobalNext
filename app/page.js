@@ -21,6 +21,12 @@ export const metadata = {
   metadataBase: new URL(BASE_URL),
   title: "VyomaGlobal | Website & Branding Experts",
   description: "Grow your business online with VyomaGlobal — from design to deployment.",
+  icons: {
+    icon: '/Vyoma-Global.png',
+    // The sizes property is where you specify the dimensions, matching your HTML
+    sizes: '16x16', 
+    type: 'image/png', // Use the correct MIME type for PNG
+  },
   openGraph: {
     title: "VyomaGlobal — Build Your Digital Future",
     description: "Transform your business with VyomaGlobal.",
