@@ -13,6 +13,7 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "VyomaGlobal | Digital Growth Experts",
   description: "We build SEO-optimized websites and branding for modern businesses.",
+  
 };
 
 
