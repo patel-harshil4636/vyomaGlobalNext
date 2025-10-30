@@ -18,6 +18,10 @@ export default function Home() {
 const BASE_URL = 'https://vyomaglobal.info';
 
 export const metadata = {
+  robots: {
+    index: true, 
+    follow: true,
+  },
   metadataBase: new URL(BASE_URL),
   title: "VyomaGlobal | Website & Branding Experts",
   description: "Grow your business online with VyomaGlobal — from design to deployment.",
