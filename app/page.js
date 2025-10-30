@@ -27,7 +27,7 @@ export const metadata = {
     url: "https://vyomaglobal.info/",
     images: [
       {
-        url: "https://vyomaglobal.info/Vyoma%20Global.png",
+        url: "https://vyomaglobal.info/Vyoma-Global.png",
         width: 800,
         height: 600,
         alt: "VyomaGlobal Website Preview",
@@ -38,6 +38,6 @@ export const metadata = {
     card: "summary_large_image",
     title: "VyomaGlobal | Web Experts",
     description: "Build websites that rank & perform.",
-    images: ["https://vyomaglobal.info/Vyoma%20Global.png"],
+    images: ["https://vyomaglobal.info/Vyoma-Global.png"],
   },
 };
