@@ -4,7 +4,7 @@ import Main from "@/components/Home/Main";
 import Nav from "@/components/Home/Nav";
 // import { Main } from "next/document";
 import Image from "next/image";
-
+MedaData
 export default function Home() {
   return (
   <>
@@ -16,9 +16,10 @@ export default function Home() {
   );
 }
 
-
+const BASE_URL = 'https://vyomaglobal.info';
 
 export const metadata = {
+  metadataBase: new URL(BASE_URL),
   title: "VyomaGlobal | Website & Branding Experts",
   description: "Grow your business online with VyomaGlobal — from design to deployment.",
   openGraph: {
@@ -27,7 +28,7 @@ export const metadata = {
     url: "https://vyomaglobal.info/",
     images: [
       {
-        url: "https://vyomaglobal.info/Vyoma-Global.png",
+        url: "/vyoma-global.png",
         width: 800,
         height: 600,
         alt: "VyomaGlobal Website Preview",
@@ -38,6 +39,6 @@ export const metadata = {
     card: "summary_large_image",
     title: "VyomaGlobal | Web Experts",
     description: "Build websites that rank & perform.",
-    images: ["https://vyomaglobal.info/Vyoma-Global.png"],
+    images: ["/vyoma-global.png"],
   },
 };
