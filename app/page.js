@@ -25,7 +25,7 @@ export const metadata = {
     title: "VyomaGlobal — Build Your Digital Future",
     description: "Transform your business with VyomaGlobal.",
     url: "https://vyomaglobal.info/",
-    images: [{ url: "./Vyoma Global.png", width: 800, height: 600, alt: "VyomaGlobal Website Preview" }],
+    images: [{ url: "/public/VyomaGlobal.png", width: 800, height: 600, alt: "VyomaGlobal Website Preview" }],
   },
   twitter: {
     card: "summary_large_image",
