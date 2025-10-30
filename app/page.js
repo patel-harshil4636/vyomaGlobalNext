@@ -4,7 +4,6 @@ import Main from "@/components/Home/Main";
 import Nav from "@/components/Home/Nav";
 // import { Main } from "next/document";
 import Image from "next/image";
-MedaData
 export default function Home() {
   return (
   <>
