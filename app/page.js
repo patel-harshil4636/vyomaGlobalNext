@@ -17,7 +17,7 @@ export default function Home() {
 }
 
 
-// app/page.jsx
+
 export const metadata = {
   title: "VyomaGlobal | Website & Branding Experts",
   description: "Grow your business online with VyomaGlobal — from design to deployment.",
@@ -25,12 +25,19 @@ export const metadata = {
     title: "VyomaGlobal — Build Your Digital Future",
     description: "Transform your business with VyomaGlobal.",
     url: "https://vyomaglobal.info/",
-    images: [{ url: "/public/VyomaGlobal.png", width: 800, height: 600, alt: "VyomaGlobal Website Preview" }],
+    images: [
+      {
+        url: "https://vyomaglobal.info/VyomaGlobal.png",
+        width: 800,
+        height: 600,
+        alt: "VyomaGlobal Website Preview",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "VyomaGlobal | Web Experts",
     description: "Build websites that rank & perform.",
-    images: ["/og-image.jpg"],
+    images: ["https://vyomaglobal.info/VyomaGlobal.png"],
   },
 };
