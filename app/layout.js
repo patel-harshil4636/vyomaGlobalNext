@@ -18,10 +18,11 @@ export const metadata = {
   title: "VyomaGlobal | Website & Branding Experts",
   description: "Grow your business online with VyomaGlobal — from design to deployment.",
 icons: {
-    icon: '/vyoma-global.png',
-    // The sizes property is where you specify the dimensions, matching your HTML
-    sizes: '16x16', 
-    type: 'image/png', // Use the correct MIME type for PNG
+    // This assumes 'vyoma-global.png' is in your /public directory
+    icon: '/vyoma-global.png', 
+    // Recommended size for Google: 48x48 or 96x96
+    sizes: '48x48', 
+    type: 'image/png', 
   },
   openGraph: {
     title: "VyomaGlobal — Build Your Digital Future",
