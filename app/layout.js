@@ -43,3 +43,35 @@ icons: {
     images: ["/vyoma-global.png"],
   },
 };
+
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <head>
+        {/* Favicon + Logo */}
+        {/* <link rel="icon" href" sizes="any" /> */}
+        <link rel="icon" type="image/png" href="https://vyomaglobal.info/vyoma-global.png" />
+        <link rel="apple-touch-icon" href="/icon.png" />
+
+        {/* Google Logo Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "Vyoma Global",
+              url: "https://vyomaglobal.info",
+              logo: "https://vyomaglobal.info/icon.png",
+            }),
+          }}
+        />
+      </head>
+
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        {children}
+      </body>
+    </html>
+  );
+}
