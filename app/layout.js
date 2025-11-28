@@ -44,7 +44,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         {/* Favicon + Logo */}
-        <link rel="icon" href="/favicon.ico" sizes="any" />
+        {/* <link rel="icon" href" sizes="any" /> */}
         <link rel="icon" type="image/png" href="/icon.png" />
         <link rel="apple-touch-icon" href="/icon.png" />
 
