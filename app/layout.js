@@ -18,7 +18,7 @@ export const metadata = {
   title: "VyomaGlobal | Website & Branding Experts",
   description: "Grow your business online with VyomaGlobal — from design to deployment.",
 icons: {
-    icon: 'https://vyomaglobal.info/vyoma-global.png',
+    icon: '/vyoma-global.png',
     // The sizes property is where you specify the dimensions, matching your HTML
     sizes: '16x16', 
     type: 'image/png', // Use the correct MIME type for PNG
