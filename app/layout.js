@@ -13,36 +13,66 @@ const geistMono = Geist_Mono({
 
 const BASE_URL = "https://vyomaglobal.info";
 
+// export const metadata = {
+//   metadataBase: new URL(BASE_URL),
+//   title: "VyomaGlobal | Website & Branding Experts",
+//   description: "Grow your business online with VyomaGlobal — from design to deployment.",
+// icons: {
+//     icon: 'https://vyomaglobal.info/vyoma-global.png',
+//     // The sizes property is where you specify the dimensions, matching your HTML
+//     sizes: '16x16', 
+//     type: 'image/png', // Use the correct MIME type for PNG
+//   },
+//   openGraph: {
+//     title: "VyomaGlobal — Build Your Digital Future",
+//     description: "Transform your business with VyomaGlobal.",
+//     url: "https://vyomaglobal.info/",
+//     images: [
+//       {
+//         url: "/vyoma-global.png",
+//         width: 800,
+//         height: 600,
+//         alt: "VyomaGlobal Website Preview",
+//       },
+//     ],
+//   },
+//   twitter: {
+//     card: "summary_large_image",
+//     title: "VyomaGlobal | Web Experts",
+//     description: "Build websites that rank & perform.",
+//     images: ["/vyoma-global.png"],
+//   },
+// };
+
 export const metadata = {
-  metadataBase: new URL(BASE_URL),
   title: "VyomaGlobal | Website & Branding Experts",
-  description: "Grow your business online with VyomaGlobal — from design to deployment.",
-icons: {
-    icon: 'https://vyomaglobal.info/vyoma-global.png',
-    // The sizes property is where you specify the dimensions, matching your HTML
-    sizes: '16x16', 
-    type: 'image/png', // Use the correct MIME type for PNG
-  },
+  description:
+    "Vyoma Global empowers businesses with innovative digital solutions and professional brand strategy.",
+
   openGraph: {
-    title: "VyomaGlobal — Build Your Digital Future",
-    description: "Transform your business with VyomaGlobal.",
-    url: "https://vyomaglobal.info/",
+    title: "VyomaGlobal | Website & Branding Experts",
+    description:
+      "Vyoma Global empowers businesses with innovative digital solutions and professional strategy.",
+    url: "https://vyomaglobal.info",
+    siteName: "Vyoma Global",
     images: [
       {
-        url: "/vyoma-global.png",
-        width: 800,
-        height: 600,
-        alt: "VyomaGlobal Website Preview",
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Vyoma Global Office",
       },
     ],
+    type: "website",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "VyomaGlobal | Web Experts",
-    description: "Build websites that rank & perform.",
-    images: ["/vyoma-global.png"],
+
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/icon.png",
+    apple: "/apple-touch-icon.png",
   },
 };
+
 
 export default function RootLayout({ children }) {
   return (
