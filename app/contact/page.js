@@ -182,7 +182,7 @@ export default function ContactSection() {
       });
 
       const data = await res.json();
-      console.log(data.msg);
+      console.log(data);
       
       if (!res.ok) {
         throw new Error("Failed to submit");
