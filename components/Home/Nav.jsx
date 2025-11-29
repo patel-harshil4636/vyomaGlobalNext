@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from 'react'
 import { SimpleButton, UiButton } from '../BTN'
+import Link from 'next/link';
 
 function Nav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -19,14 +20,28 @@ function Nav() {
       {/* Desktop Navigation */}
       <ul className='hidden lg:flex gap-6 xl:gap-8' >
         {['Feature','Solution','Company','Resources','Contact'].map((item, index) => (
-          <li 
-            key={index}
+        <>  
+        {item=='Contact'?<>
+        <Link href={'/contact'}>
+        <li 
+         key={index}
             className={`text-sm xl:text-base font-medium transition-colors duration-200 hover:text-cyan-900 ${
               item === 'Feature' ? 'text-cyan-900 font-semibold' : 'text-gray-600'
             }`}
           >
             {item}
           </li>
+        </Link>
+        </>:<li 
+         key={index}
+            className={`text-sm xl:text-base font-medium transition-colors duration-200 hover:text-cyan-900 ${
+              item === 'Feature' ? 'text-cyan-900 font-semibold' : 'text-gray-600'
+            }`}
+          >
+            {item}
+          </li>}
+         
+          </>
         ))}
       </ul>
 
