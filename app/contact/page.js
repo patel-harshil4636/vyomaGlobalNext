@@ -181,6 +181,9 @@ export default function ContactSection() {
         body: JSON.stringify(payload),
       });
 
+      const data = await res.json();
+      console.log(data.msg);
+      
       if (!res.ok) {
         throw new Error("Failed to submit");
       }
