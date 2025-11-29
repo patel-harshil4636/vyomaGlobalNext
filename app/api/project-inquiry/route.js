@@ -5,6 +5,9 @@ import ProjectInquiry from "@/models/ProjectInquiry";
 
 export async function POST(request) {
   try {
+
+    console.log("MONGODB_URI exists in deploy?", !!process.env.MONGODB_URI);
+
     const body = await request.json();
 
     const {
