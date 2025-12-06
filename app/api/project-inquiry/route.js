@@ -6,7 +6,7 @@ import ProjectInquiry from "@/models/ProjectInquiry";
 export async function POST(request) {
   try {
     const body = await request.json();
-      log("Received project inquiry data:", body);
+      console.log("Received project inquiry data:", body);
     const {
       fullName,
       email,
