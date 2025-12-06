@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { name } = body;
+    // const { name } = body;
 
     // 👉 Here you can do:
     // - save to MongoDB
