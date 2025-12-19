@@ -1,5 +1,6 @@
 import React from 'react'
 import { SimpleButton, UiButton } from '../BTN'
+import Image from 'next/image'
 
 function Hero() {
   return (
@@ -8,11 +9,14 @@ function Hero() {
         {/* Main Hero Section */}
         <div className='flex flex-col lg:flex-row'>
           {/* Side Images - Hidden on mobile, visible on large screens */}
-          <div className='hidden lg:block flex-1'>
-            <img 
-              src="./Home/hero-side-1.png" 
+          <div className='hidden lg:block flex-1 relative'>
+            <Image  
+              src="/Home/hero-side-1.png" 
               className='w-full h-full object-cover' 
-              alt="Decoration" 
+              alt="Decoration"
+              width={500}     // REQUIRED: Add appropriate width
+              height={800}    // REQUIRED: Add appropriate height
+              priority={true} // Good for above-the-fold images
             />
           </div>
           
@@ -31,7 +35,7 @@ function Hero() {
               
               <div className='flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 pt-4'>
                 <UiButton theme={'HOME'}>
-                  Let's Build Your Website 
+                  {`Let's Build Your Website `}
                 </UiButton>
                 <SimpleButton>
                   Explore 
@@ -45,11 +49,14 @@ function Hero() {
           </div>
           
           {/* Right Side Image - Hidden on mobile, visible on large screens */}
-          <div className='hidden lg:block flex-1'>
-            <img 
-              src="./Home/hero-side-1.png" 
+          <div className='hidden lg:block flex-1 relative'>
+            <Image  
+              src="/Home/hero-side-1.png" 
               className='w-full scale-x-[-1] h-full object-cover' 
-              alt="Decoration" 
+              alt="Decoration"
+              width={500}     // REQUIRED: Same dimensions as left image
+              height={800}    // REQUIRED: Same dimensions as left image
+              priority={true}
             />
           </div>
         </div>

@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import { SimpleButton, UiButton } from '../BTN'
 import Link from 'next/link';
+import Image from 'next/image';
 
 function Nav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -10,38 +11,40 @@ function Nav() {
     <nav className='flex justify-between items-center py-4 px-4 sm:px-6 lg:ps-14 lg:pe-8 relative'>
       {/* Logo */}
       <div id='logo' className='w-1/4 sm:w-1/6 lg:w-1/12'>
-        <img 
-          src="./Vyoma Global.png" 
+        <Image 
+          src="/Vyoma Global.png" 
           className='w-full h-auto max-w-[80px] sm:max-w-[100px]' 
           alt="Vyoma Global Logo" 
+          width={100}      // REQUIRED: Add width
+          height={40}      // REQUIRED: Add height (adjust based on your logo aspect ratio)
+          priority={true}  // Important for logo (above-the-fold)
         />
       </div>
 
       {/* Desktop Navigation */}
       <ul className='hidden lg:flex gap-6 xl:gap-8' >
         {['Feature','Solution','Company','Resources','Contact'].map((item, index) => (
-        <>  
-        {item=='Contact'?<>
-        <Link href={'/contact'}>
-        <li 
-         key={index}
-            className={`text-sm xl:text-base font-medium transition-colors duration-200 hover:text-cyan-900 ${
-              item === 'Feature' ? 'text-cyan-900 font-semibold' : 'text-gray-600'
-            }`}
-          >
-            {item}
-          </li>
-        </Link>
-        </>:<li 
-         key={index}
-            className={`text-sm xl:text-base font-medium transition-colors duration-200 hover:text-cyan-900 ${
-              item === 'Feature' ? 'text-cyan-900 font-semibold' : 'text-gray-600'
-            }`}
-          >
-            {item}
-          </li>}
-         
-          </>
+          <React.Fragment key={index}>
+            {item === 'Contact' ? (
+              <Link href={'/contact'}>
+                <li 
+                  className={`text-sm xl:text-base font-medium transition-colors duration-200 hover:text-cyan-900 ${
+                    item === 'Feature' ? 'text-cyan-900 font-semibold' : 'text-gray-600'
+                  }`}
+                >
+                  {item}
+                </li>
+              </Link>
+            ) : (
+              <li 
+                className={`text-sm xl:text-base font-medium transition-colors duration-200 hover:text-cyan-900 ${
+                  item === 'Feature' ? 'text-cyan-900 font-semibold' : 'text-gray-600'
+                }`}
+              >
+                {item}
+              </li>
+            )}
+          </React.Fragment>
         ))}
       </ul>
 

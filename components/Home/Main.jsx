@@ -1,23 +1,25 @@
+"use client";
 import React from 'react'
 import { UiButton } from '../BTN'
 import { HomeCard } from './Card'
+import Image from 'next/image'
 
 function Main() {
     const cardData = [
         {
             title: 'Empowered Clients',
             desc: 'At Vyoma Global, we build experiences that delight. From strategy to support, we help brands shine online and connect deeply with their audience.',
-            img: "../Home/1st.jpg"
+            img: "/Home/1st.jpg"  // ✅ Fixed: Changed "../" to "/"
         },
         {
             title: 'Seamless Integrations',
             desc: 'Our platforms are crafted to blend effortlessly with your existing systems — offering smooth scalability, automation, and flexibility for modern businesses.',
-            img: "../Home/2nd.jpg"
+            img: "/Home/2nd.jpg"  // ✅ Fixed: Changed "../" to "/"
         },
         {
             title: 'Sustainable Growth',
-            desc: 'We don\'t just build websites; we build opportunities. With data-driven strategies and adaptive technology, Vyoma Global ensures your business evolves with the future.',
-            img: "../Home/3rd.jpg"
+            desc: `We don't just build websites; we build opportunities. With data-driven strategies and adaptive technology, Vyoma Global ensures your business evolves with the future.`,  // ✅ Fixed: Escaped apostrophe
+            img: "/Home/3rd.jpg"  // ✅ Fixed: Changed "../" to "/"
         }
     ]
 
@@ -59,10 +61,12 @@ function Main() {
             {/* Bridge Section */}
             <section className='relative flex flex-col lg:flex-row gap-8 lg:gap-40 justify-between px-6 sm:px-8 lg:px-12 py-12'>
                 <div className='w-full lg:w-1/2 relative'>
-                    <img 
-                        src="../Home/mainConsult.jpg" 
+                    <Image 
+                        src="/Home/mainConsult.jpg"  // ✅ Fixed: Changed "../" to "/"
                         className='w-full h-auto object-cover rounded-lg' 
                         alt="Consultation" 
+                        width={600}      // ✅ Added: Required width
+                        height={400}     // ✅ Added: Required height
                     />
                     {/* Award Badge - Responsive positioning */}
                     <div className='absolute -bottom-6 -right-6 lg:bottom-2/12 lg:right-3/6 h-32 w-32 lg:h-48 lg:w-48 flex items-center justify-center bg-cyan-950 rounded-full transform lg:translate-x-1/2 lg:translate-y-1/2'>
@@ -117,9 +121,9 @@ function Main() {
                     </h1>
                     <p className='text-lg text-center lg:text-left'>
                         <span className='font-semibold'>I believe every local business deserves a global identity.</span>
-                        Vyoma Global was built from the belief that technology isn't just for big companies — it's for every dream that deserves to be seen.
+                        {` Vyoma Global was built from the belief that technology isn't just for big companies — it's for every dream that deserves to be seen.
                         I started this journey to help brands turn their ideas into impactful digital realities — affordable, professional, and built with purpose.
-                        For me, it's not just about creating websites; it's about creating opportunities, trust, and growth that speak louder than words.
+                        For me, it's not just about creating websites; it's about creating opportunities, trust, and growth that speak louder than words.`}  
                     </p>
                     
                     <div className='text-center lg:text-left'>
@@ -138,10 +142,12 @@ function Main() {
                     </div>
                 </div>
                 <div className='lg:flex-1 flex justify-center lg:justify-end'>
-                    <img 
-                        src="../Home/harshil.png" 
+                    <Image 
+                        src="/Home/harshil.png"  // ✅ Fixed: Changed "../" to "/"
                         className='w-full max-w-md lg:max-w-lg h-auto object-contain' 
                         alt="Harshil Patel - Founder" 
+                        width={500}      // ✅ Added: Required width
+                        height={600}     // ✅ Added: Required height
                     />
                 </div>
             </section>
@@ -165,10 +171,12 @@ function Main() {
 
                 {/* Right Image Section */}
                 <div className="relative mt-8 lg:mt-0">
-                    <img
-                        src="../Home/agent.png"
+                    <Image
+                        src="/Home/agent.png"  // ✅ Fixed: Changed "../" to "/"
                         alt="Customer Support Agent"
                         className="w-64 sm:w-72 lg:w-80 rounded-lg object-cover relative z-10"
+                        width={320}     // ✅ Added: Required width
+                        height={400}    // ✅ Added: Required height
                     />
 
                     {/* Decorative Shapes */}
