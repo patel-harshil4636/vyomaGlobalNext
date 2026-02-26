@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-// Removed unused imports (LayoutDashboard, Edit3) that crash Netlify builds
+import Image from "next/image"; // <-- Added Next.js Image component
 import { 
   LogOut, CheckCircle, AlertCircle, Briefcase, 
   TrendingUp, Users, PlayCircle, Settings, Save, Plus,
@@ -19,16 +19,17 @@ import {
 } from "firebase/firestore";
 
 // --- FIREBASE CONFIG ---
-// SECURITY NOTE: It is highly recommended to move these to environment variables 
-// (e.g., process.env.NEXT_PUBLIC_FIREBASE_API_KEY) before pushing to a public repository.
+// SECURITY UPDATE: In Next.js, "use client" components expose their code to the browser.
+// Always use environment variables prefixed with NEXT_PUBLIC_ for client-side keys.
+// Please move these fallbacks into a .env.local file.
 const firebaseConfig = {
-  apiKey: "AIzaSyDsfHoYay8d1aAjYTS-tPqGFfBlPBV-sh8",
-  authDomain: "vyoma-global.firebaseapp.com",
-  projectId: "vyoma-global",
-  storageBucket: "vyoma-global.firebasestorage.app",
-  messagingSenderId: "632540356913",
-  appId: "1:632540356913:web:aa35ec88c249bac56b1010",
-  measurementId: "G-1CN5LW76TB"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyDsfHoYay8d1aAjYTS-tPqGFfBlPBV-sh8",
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "vyoma-global.firebaseapp.com",
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "vyoma-global",
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "vyoma-global.firebasestorage.app",
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "632540356913",
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "1:632540356913:web:aa35ec88c249bac56b1010",
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || "G-1CN5LW76TB"
 };
 
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
@@ -120,7 +121,14 @@ export default function App() {
       <div className="min-h-screen flex items-center justify-center bg-slate-50 p-6">
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="w-full max-w-md bg-white rounded-3xl shadow-xl border border-slate-100 p-10">
           <div className="flex flex-col items-center mb-8">
-            <img src="/icon.png" alt="Vyoma Global" className="h-16 w-auto rounded-xl shadow-sm mb-4 object-cover" />
+            <Image 
+              src="/icon.png" 
+              alt="Vyoma Global" 
+              width={64} 
+              height={64} 
+              className="h-16 w-auto rounded-xl shadow-sm mb-4 object-cover"
+              priority // Prioritizes loading this image above the fold
+            />
             <h1 className="text-2xl font-bold text-slate-900">Portal Login</h1>
           </div>
           
@@ -182,26 +190,26 @@ function AdminDashboard({ db, handleLogout }) {
   };
   
   useEffect(() => {
-  if (!selectedClient) return; // don't call setState here
+    if (!selectedClient) return;
 
-  const unsub = onSnapshot(
-    collection(db, "clients", selectedClient.id, "months"),
-    (snap) => {
-      const mList = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      mList.sort((a, b) => b.id.localeCompare(a.id));
-      setMonths(mList);
-    }
-  );
+    const unsub = onSnapshot(
+      collection(db, "clients", selectedClient.id, "months"),
+      (snap) => {
+        const mList = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        mList.sort((a, b) => b.id.localeCompare(a.id));
+        setMonths(mList);
+      }
+    );
 
-  return () => unsub();
-}, [selectedClient]);   
+    return () => unsub();
+  }, [selectedClient, db]);   
 
-// Elsewhere, when you clear the selected client (example):
-function clearSelectedClient() {
-  setSelectedClient(null);
-  setMonths([]);
-  setSelectedMonth(null);
-}
+  function clearSelectedClient() {
+    setSelectedClient(null);
+    setMonths([]);
+    setSelectedMonth(null);
+  }
+
   const createClient = async () => {
     const clientEmail = prompt("Enter the Client's Google Email Address:");
     if (!clientEmail) return;
@@ -427,7 +435,13 @@ function ClientDashboard({ user, db, handleLogout }) {
     <div className="min-h-screen bg-[#F8FAFC] font-sans text-slate-900 flex flex-col md:flex-row">
       <aside className="hidden md:flex flex-col w-64 bg-white border-r border-slate-200 fixed h-full z-10">
         <div className="p-8 pb-4 flex flex-col items-start">
-          <img src="/icon.png" alt="Vyoma Global" className="h-10 w-auto rounded object-cover mb-4" />
+          <Image 
+            src="/icon.png" 
+            alt="Vyoma Global" 
+            width={40} 
+            height={40} 
+            className="h-10 w-auto rounded object-cover mb-4" 
+          />
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Client Portal</p>
         </div>
         <nav className="flex-1 px-4 space-y-2 mt-4">
@@ -438,13 +452,19 @@ function ClientDashboard({ user, db, handleLogout }) {
 
       <main className="flex-1 md:ml-64 p-6 lg:p-10 max-w-7xl">
         <div className="md:hidden flex items-center justify-between bg-white p-4 rounded-2xl shadow-sm mb-6 border border-slate-100">
-          <img src="/Vyoma.jpg" alt="Vyoma" className="h-8 rounded" />
+          <Image 
+            src="/Vyoma.jpg" 
+            alt="Vyoma" 
+            width={32} 
+            height={32} 
+            className="h-8 w-auto rounded" 
+          />
           <button onClick={handleLogout} className="text-slate-500"><LogOut className="w-5 h-5" /></button>
         </div>
 
         <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8">
           <div>
-            <h2 className="text-3xl font-bold text-slate-900 mb-2 tracking-tight">Welcome , {clientData?.name}</h2>
+            <h2 className="text-3xl font-bold text-slate-900 mb-2 tracking-tight">Welcome, {clientData?.name}</h2>
             <p className="text-slate-500 text-sm">Here is your digital performance and task breakdown.</p>
           </div>
           <div className="flex flex-wrap items-center gap-4">
@@ -490,7 +510,6 @@ function ClientDashboard({ user, db, handleLogout }) {
 
                 <div className="grid lg:grid-cols-3 gap-8">
                   <div className="lg:col-span-2 space-y-8">
-                    {/* TAILWIND FIX: Dynamic string interpolation like `bg-${color}-500` breaks in production. Hardcoded exact class strings instead. */}
                     {[
                       { title: "Completed Work", data: currentMonth.doneWork || [], theme: { line: "bg-emerald-500", text: "text-emerald-500", dot: "bg-emerald-400" }, icon: CheckCircle },
                       { title: "Pending Client Approval", data: currentMonth.pendingWork || [], theme: { line: "bg-amber-500", text: "text-amber-500", dot: "bg-amber-400" }, icon: AlertCircle },

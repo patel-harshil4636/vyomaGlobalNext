@@ -7,14 +7,13 @@ import Lenis from "@studio-freight/lenis";
 import { 
   ArrowRight, CheckCircle2, Smartphone, Target, 
   Users, Building2, Home, GraduationCap, 
-  Rocket, Scissors, Mail, MapPin,
-  Instagram, MessageCircle, PhoneCall // <-- New Lucide Icons imported
+  Rocket, Scissors, MapPin,
+  Instagram, MessageCircle, PhoneCall 
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
-// ==========================================
 // 1. PRO-LEVEL ANIMATION VARIANTS
-// ==========================================
 const springTransition = { type: "spring", stiffness: 100, damping: 20, mass: 1 };
 
 const fadeUpVariant = {
@@ -27,12 +26,13 @@ const staggerContainer = {
   visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.1 } }
 };
 
-// ==========================================
+// Create a motion-enabled Next.js Image component
+const MotionImage = motion.create(Image);
+
 // 2. PREMIUM COMPONENTS
-// ==========================================
 
 // Magnetic Button (Cursor follows button slightly)
-const MagneticButton = ({ children, className, onClick, as: Component = "button", href }) => {
+const MagneticButton = ({ children, className, onClick, as: Component = "button", href, target, rel }) => {
   const ref = useRef(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
@@ -55,7 +55,7 @@ const MagneticButton = ({ children, className, onClick, as: Component = "button"
       transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
       className="inline-block w-full sm:w-auto"
     >
-      <Component href={href} onClick={onClick} className={className}>
+      <Component href={href} onClick={onClick} className={className} target={target} rel={rel}>
         {children}
       </Component>
     </motion.div>
@@ -105,9 +105,7 @@ const Counter = ({ end, suffix, label }) => {
   );
 };
 
-// ==========================================
 // 3. MAIN PAGE COMPONENT
-// ==========================================
 export default function VyomaGlobal() {
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start start", "end end"] });
@@ -135,17 +133,13 @@ export default function VyomaGlobal() {
           <div className="text-xl font-bold text-blue-600 tracking-tight cursor-pointer">VyomaGlobal</div>
           <nav className="hidden md:flex gap-10 text-[13px] font-semibold tracking-wide text-slate-500">
             {['Features', 'Portfolio', 'Testimonials', 'About Us', 'Contact'].map((item) => (
-              <a key={item} href="#" className="hover:text-slate-900 transition-colors">{item}</a>
+              <a key={item} href={`#${item.toLowerCase().replace(' ', '-')}`} className="hover:text-slate-900 transition-colors">{item}</a>
             ))}
           </nav>
           <div className="flex items-center gap-6">
-           <Link 
-           href={'/clients'}>
-            <MagneticButton className="bg-blue-600 text-white px-6 py-2.5 rounded-full text-[13px] font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/20 block">
-                          Login
-
+            <MagneticButton as={Link} href="/clients" className="bg-blue-600 text-white px-6 py-2.5 rounded-full text-[13px] font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/20 block">
+              Login
             </MagneticButton>
-            </Link>
           </div>
         </div>
       </motion.header>
@@ -171,7 +165,7 @@ export default function VyomaGlobal() {
             <MagneticButton className="bg-blue-600 text-white px-8 py-4 rounded-full text-[15px] font-semibold hover:bg-blue-700 transition-all shadow-xl shadow-blue-600/25 w-full block text-center">
               Let's Build Your Website
             </MagneticButton>
-            <MagneticButton as="a" href="#portfolio" className="bg-transparent border border-slate-200 text-slate-700 px-8 py-4 rounded-full text-[15px] font-semibold flex items-center justify-center gap-2 hover:border-slate-300 hover:bg-slate-50 transition-all w-full">
+            <MagneticButton as={Link} href="#portfolio" scroll={true} className="bg-transparent border border-slate-200 text-slate-700 px-8 py-4 rounded-full text-[15px] font-semibold flex items-center justify-center gap-2 hover:border-slate-300 hover:bg-slate-50 transition-all w-full">
               View Our Work <ArrowRight className="w-4 h-4" />
             </MagneticButton>
           </motion.div>
@@ -179,7 +173,15 @@ export default function VyomaGlobal() {
           <motion.div variants={fadeUpVariant} className="flex items-center gap-4">
             <div className="flex -space-x-3">
               {[11, 12, 13, 14].map((i) => (
-                <img key={i} src={`https://i.pravatar.cc/100?img=${i}`} alt="user" className="w-10 h-10 rounded-full border-2 border-[#F8FAFC] shadow-sm" />
+                <Image 
+                  key={i} 
+                  src={`https://i.pravatar.cc/100?img=${i}`} 
+                  alt="Trusted Client" 
+                  width={40} 
+                  height={40} 
+                  className="rounded-full border-2 border-[#F8FAFC] shadow-sm" 
+                  unoptimized={false} // Will need domain whitelisted in next.config.ts
+                />
               ))}
             </div>
             <p className="text-[13px] font-medium text-slate-500 leading-tight">
@@ -191,16 +193,19 @@ export default function VyomaGlobal() {
         {/* Parallax Hero Image with Clip-Path Reveal */}
         <div className="lg:w-[45%] w-full h-[600px] lg:h-[750px] relative rounded-[2.5rem] overflow-hidden shadow-2xl shadow-slate-200">
           <motion.div 
-            className="w-full h-[120%]" 
+            className="w-full h-[120%] relative" 
             style={{ y: heroImageY }}
             initial={{ clipPath: "inset(100% 0% 0% 0%)" }}
             animate={{ clipPath: "inset(0% 0% 0% 0%)" }}
             transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
           >
-            <img 
-              src="./Home/harshil-2.png" 
+            <Image 
+              src="/Home/harshil-2.png" 
               alt="Harshil Patel - Vyoma Global" 
-              className="object-cover object-right w-full h-full"
+              fill
+              priority // Crucial for LCP (Largest Contentful Paint) optimization in Next 15
+              className="object-cover object-right"
+              sizes="(max-width: 1024px) 100vw, 45vw"
             />
           </motion.div>
         </div>
@@ -214,7 +219,7 @@ export default function VyomaGlobal() {
       </div>
 
       {/* --- FEATURES SECTION --- */}
-      <section className="py-32 px-6 max-w-[1400px] mx-auto text-center">
+      <section className="py-32 px-6 max-w-[1400px] mx-auto text-center" id="features">
         <Reveal>
           <div className="inline-block bg-blue-50/80 text-blue-600 px-4 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase mb-6">Features</div>
           <h2 className="text-[40px] md:text-[48px] font-bold mb-20 max-w-3xl mx-auto tracking-tight leading-[1.1] text-slate-900">
@@ -291,7 +296,7 @@ export default function VyomaGlobal() {
       </section>
 
       {/* --- ABOUT SECTION --- */}
-      <section className="py-32 px-6 max-w-[1400px] mx-auto flex flex-col md:flex-row items-center gap-20">
+      <section className="py-32 px-6 max-w-[1400px] mx-auto flex flex-col md:flex-row items-center gap-20" id="about-us">
         <div className="md:w-1/2 pr-0 lg:pr-10">
           <Reveal>
             <div className="inline-block bg-blue-50/80 text-blue-600 px-4 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase mb-6">About the Founder</div>
@@ -309,12 +314,14 @@ export default function VyomaGlobal() {
         <div className="md:w-1/2 w-full">
           <Reveal delay={0.2}>
             <div className="relative rounded-[2.5rem] overflow-hidden h-[600px] shadow-2xl shadow-slate-200/50 group">
-              <motion.img 
+              <MotionImage 
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
-                src="./Home/Harshil.png" 
+                src="/Home/Harshil.png" 
                 alt="Harshil Patel - Founder" 
-                className="w-full h-full object-cover"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover"
               />
               <div className="absolute inset-0 border border-black/5 rounded-[2.5rem] pointer-events-none"></div>
             </div>
@@ -323,7 +330,7 @@ export default function VyomaGlobal() {
       </section>
 
       {/* --- CTA SECTION --- */}
-      <section className="py-16 px-6 max-w-[1400px] mx-auto">
+      <section className="py-16 px-6 max-w-[1400px] mx-auto" id="contact">
         <Reveal>
           <div className="bg-blue-500 rounded-[3rem] p-16 md:p-24 text-center text-white relative overflow-hidden shadow-2xl shadow-blue-500/30">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-blue-400 via-transparent to-transparent opacity-80"></div>
@@ -335,12 +342,11 @@ export default function VyomaGlobal() {
               </p>
               
               <div className="flex flex-col sm:flex-row justify-center gap-5 w-full sm:w-auto">
-                <MagneticButton as="a" href="tel:+918200953641" className="bg-white text-blue-600 px-10 py-4 rounded-full text-[15px] font-bold shadow-xl hover:shadow-2xl transition-shadow w-full block text-center flex items-center justify-center gap-2">
+                <MagneticButton as={Link} href="tel:+918200953641" className="bg-white text-blue-600 px-10 py-4 rounded-full text-[15px] font-bold shadow-xl hover:shadow-2xl transition-shadow w-full block text-center flex items-center justify-center gap-2">
                   <PhoneCall className="w-4 h-4" /> Call Now
                 </MagneticButton>
                 
-                {/* Updated to open WhatsApp link */}
-                <MagneticButton as="a" href="https://wa.me/918200953641" target="_blank" rel="noopener noreferrer" className="bg-transparent border border-blue-300 text-white px-10 py-4 rounded-full text-[15px] font-bold hover:bg-white/10 transition-colors w-full block text-center flex items-center justify-center gap-2">
+                <MagneticButton as={Link} href="https://wa.me/918200953641" target="_blank" rel="noopener noreferrer" className="bg-transparent border border-blue-300 text-white px-10 py-4 rounded-full text-[15px] font-bold hover:bg-white/10 transition-colors w-full block text-center flex items-center justify-center gap-2">
                   <MessageCircle className="w-5 h-5" /> Chat on WhatsApp
                 </MagneticButton>
               </div>
@@ -363,17 +369,12 @@ export default function VyomaGlobal() {
               Empowering local businesses and startups with high-impact digital infrastructures that drive growth.
             </p>
             <div className="flex gap-4">
-              {/* Instagram Link */}
               <a href="https://instagram.com/vyomaglobal" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-slate-50 border border-slate-100 rounded-full flex items-center justify-center hover:bg-blue-600 hover:border-blue-600 hover:text-white transition-all cursor-pointer group shadow-sm">
                 <Instagram className="w-4 h-4 text-slate-500 group-hover:text-white transition-colors" />
               </a>
-              
-              {/* WhatsApp Link */}
-              <a href="https://wa.me/918200953641?text=Hello%20Vyoma%20Global,%20I%20am%20contacting%20you%20from%20your%20website.%20I%20would%20like%20to%20know%20more%20about%20your%20services." target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-slate-50 border border-slate-100 rounded-full flex items-center justify-center hover:bg-emerald-500 hover:border-emerald-500 hover:text-white transition-all cursor-pointer group shadow-sm">
+              <a href="https://wa.me/918200953641" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-slate-50 border border-slate-100 rounded-full flex items-center justify-center hover:bg-emerald-500 hover:border-emerald-500 hover:text-white transition-all cursor-pointer group shadow-sm">
                 <MessageCircle className="w-4 h-4 text-slate-500 group-hover:text-white transition-colors" />
               </a>
-
-              {/* Direct Call Link */}
               <a href="tel:+918200953641" className="w-10 h-10 bg-slate-50 border border-slate-100 rounded-full flex items-center justify-center hover:bg-blue-600 hover:border-blue-600 hover:text-white transition-all cursor-pointer group shadow-sm">
                 <PhoneCall className="w-4 h-4 text-slate-500 group-hover:text-white transition-colors" />
               </a>
@@ -383,20 +384,20 @@ export default function VyomaGlobal() {
           <div>
             <h4 className="font-bold mb-8 text-slate-900 tracking-wide text-[15px]">Services</h4>
             <ul className="space-y-4 text-[14px] text-slate-500 font-medium">
-              <li><a href="#" className="hover:text-blue-600 transition-colors block">Website Design</a></li>
-              <li><a href="#" className="hover:text-blue-600 transition-colors block">Digital Marketing</a></li>
-              <li><a href="#" className="hover:text-blue-600 transition-colors block">Brand Strategy</a></li>
-              <li><a href="#" className="hover:text-blue-600 transition-colors block">E-commerce Solutions</a></li>
+              <li><Link href="#" className="hover:text-blue-600 transition-colors block">Website Design</Link></li>
+              <li><Link href="#" className="hover:text-blue-600 transition-colors block">Digital Marketing</Link></li>
+              <li><Link href="#" className="hover:text-blue-600 transition-colors block">Brand Strategy</Link></li>
+              <li><Link href="#" className="hover:text-blue-600 transition-colors block">E-commerce Solutions</Link></li>
             </ul>
           </div>
 
           <div>
             <h4 className="font-bold mb-8 text-slate-900 tracking-wide text-[15px]">Company</h4>
             <ul className="space-y-4 text-[14px] text-slate-500 font-medium">
-              <li><a href="#" className="hover:text-blue-600 transition-colors block">About the Founder</a></li>
-              <li><a href="#" className="hover:text-blue-600 transition-colors block">Affiliate Program</a></li>
-              <li><a href="#" className="hover:text-blue-600 transition-colors block">Terms of Service</a></li>
-              <li><a href="#" className="hover:text-blue-600 transition-colors block">Privacy Policy</a></li>
+              <li><Link href="#" className="hover:text-blue-600 transition-colors block">About the Founder</Link></li>
+              <li><Link href="#" className="hover:text-blue-600 transition-colors block">Affiliate Program</Link></li>
+              <li><Link href="#" className="hover:text-blue-600 transition-colors block">Terms of Service</Link></li>
+              <li><Link href="#" className="hover:text-blue-600 transition-colors block">Privacy Policy</Link></li>
             </ul>
           </div>
 
@@ -409,7 +410,7 @@ export default function VyomaGlobal() {
                 </a>
               </li>
               <li>
-                <a href="https://wa.me/918200953641?text=Hello%20Vyoma%20Global,%20I%20am%20contacting%20you%20from%20your%20website.%20I%20would%20like%20to%20know%20more%20about%20your%20services." target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 hover:text-emerald-500 cursor-pointer transition-colors group">
+                <a href="https://wa.me/918200953641" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 hover:text-emerald-500 cursor-pointer transition-colors group">
                   <MessageCircle className="w-4 h-4 text-blue-500 group-hover:text-emerald-500 group-hover:scale-110 transition-all" /> wp: (+91) 8200953641
                 </a>
               </li>
