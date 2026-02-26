@@ -180,6 +180,17 @@ function AdminDashboard({ db, handleLogout }) {
     return () => unsub();
   }, [db]);
 
+
+    const handleSelectMonth = (m) => {
+    setSelectedMonth(m);
+    setMonthForm({
+      ...m,
+      doneWorkStr: m.doneWork?.map(w => w.task).join("\n") || "",
+      pendingWorkStr: m.pendingWork?.map(w => w.task).join("\n") || "",
+      upcomingWorkStr: m.upcomingWork?.map(w => w.task).join("\n") || ""
+    });
+  };
+  
   useEffect(() => {
     if (!selectedClient) { setMonths([]); setSelectedMonth(null); return; }
     // Fetch without orderBy to PREVENT index errors. Sort locally in JS.
@@ -192,15 +203,7 @@ function AdminDashboard({ db, handleLogout }) {
     return () => unsub();
   }, [selectedClient, db]);
 
-  const handleSelectMonth = (m) => {
-    setSelectedMonth(m);
-    setMonthForm({
-      ...m,
-      doneWorkStr: m.doneWork?.map(w => w.task).join("\n") || "",
-      pendingWorkStr: m.pendingWork?.map(w => w.task).join("\n") || "",
-      upcomingWorkStr: m.upcomingWork?.map(w => w.task).join("\n") || ""
-    });
-  };
+
 
   // ADMIN ADDS A NEW USER
   const createClient = async () => {
