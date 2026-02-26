@@ -1,0 +1,10 @@
+const firebaseConfig = {
+  apiKey: "AIzaSyDsfHoYay8d1aAjYTS-tPqGFfBlPBV-sh8",
+  authDomain: "vyoma-global.firebaseapp.com",
+  projectId: "vyoma-global",
+  storageBucket: "vyoma-global.firebasestorage.app",
+  messagingSenderId: "632540356913",
+  appId: "1:632540356913:web:aa35ec88c249bac56b1010",
+  measurementId: "G-1CN5LW76TB"
+};
+

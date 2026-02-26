@@ -1,16 +1,21 @@
 import Footer from "@/components/Home/Footer";
 import Hero from "@/components/Home/Hero";
+import HomePage from "@/components/Home/HomePage";
 import Main from "@/components/Home/Main";
 import Nav from "@/components/Home/Nav";
 // import { Main } from "next/document";
 import Image from "next/image";
+
+
+
 export default function Home() {
   return (
   <>
-      <Nav></Nav>
+  <HomePage></HomePage>
+      {/* <Nav></Nav>
       <Hero></Hero>
       <Main></Main>
-      <Footer></Footer>
+      <Footer></Footer> */}
   </>
   );
 }
