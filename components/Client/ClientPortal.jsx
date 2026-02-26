@@ -182,16 +182,26 @@ function AdminDashboard({ db, handleLogout }) {
   };
   
   useEffect(() => {
-    if (!selectedClient) { setMonths([]); setSelectedMonth(null); return; }
-    const unsub = onSnapshot(collection(db, "clients", selectedClient.id, "months"), (snap) => {
-      const mList = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      mList.sort((a, b) => b.id.localeCompare(a.id)); 
-      setMonths(mList);
-      if (mList.length > 0) handleSelectMonth(mList[0]);
-    });
-    return () => unsub();
-  }, [selectedClient, db]);
+  if (!selectedClient) return; // don't call setState here
 
+  const unsub = onSnapshot(
+    collection(db, "clients", selectedClient.id, "months"),
+    (snap) => {
+      const mList = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      mList.sort((a, b) => b.id.localeCompare(a.id));
+      setMonths(mList);
+    }
+  );
+
+  return () => unsub();
+}, [selectedClient]);   
+
+// Elsewhere, when you clear the selected client (example):
+function clearSelectedClient() {
+  setSelectedClient(null);
+  setMonths([]);
+  setSelectedMonth(null);
+}
   const createClient = async () => {
     const clientEmail = prompt("Enter the Client's Google Email Address:");
     if (!clientEmail) return;
