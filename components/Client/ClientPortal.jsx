@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import Image from "next/image"; // <-- Added Next.js Image component
+import Image from "next/image";
 import { 
   LogOut, CheckCircle, AlertCircle, Briefcase, 
   TrendingUp, Users, PlayCircle, Settings, Save, Plus,
@@ -11,17 +11,14 @@ import {
 
 import { initializeApp, getApps } from "firebase/app";
 import { 
-  getAuth, signInWithEmailAndPassword, signInWithPopup, 
-  GoogleAuthProvider, onAuthStateChanged, signOut 
+  getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, // <-- Added createUser
+  signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut 
 } from "firebase/auth";
 import { 
   getFirestore, doc, getDoc, setDoc, updateDoc, collection, onSnapshot 
 } from "firebase/firestore";
 
 // --- FIREBASE CONFIG ---
-// SECURITY UPDATE: In Next.js, "use client" components expose their code to the browser.
-// Always use environment variables prefixed with NEXT_PUBLIC_ for client-side keys.
-// Please move these fallbacks into a .env.local file.
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyDsfHoYay8d1aAjYTS-tPqGFfBlPBV-sh8",
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "vyoma-global.firebaseapp.com",
@@ -37,10 +34,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
 
-// --- MASTER ADMIN ---
 const ADMIN_EMAIL = "vyomaglobal01@gmail.com";
-
-// --- ANIMATIONS ---
 const fadeUp = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
 
 export default function App() {
@@ -52,6 +46,7 @@ export default function App() {
   const [password, setPassword] = useState("");
   const [authError, setAuthError] = useState("");
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false); // <-- Added toggle state
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -61,13 +56,19 @@ export default function App() {
           setRole("admin");
         } else {
           setRole("client");
-          await ensureClientProfileExists(currentUser);
+          // FIX: Wrapped in try...catch so loading screen doesn't get stuck if DB fails
+          try {
+            await ensureClientProfileExists(currentUser);
+          } catch (error) {
+            console.error("Error setting up client profile:", error);
+          }
         }
       } else {
         setUser(null);
         setRole(null);
       }
-      setAuthLoading(false);
+      // FIX: This will now ALWAYS run, preventing the infinite loading bug
+      setAuthLoading(false); 
     });
     return () => unsubscribe();
   }, []);
@@ -100,13 +101,18 @@ export default function App() {
     }
   };
 
-  const handleEmailLogin = async (e) => {
+  // FIX: Handles both Login AND Registration for email users
+  const handleEmailAuth = async (e) => {
     e.preventDefault();
     setAuthError(""); setIsLoggingIn(true);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      if (isSignUp) {
+        await createUserWithEmailAndPassword(auth, email, password);
+      } else {
+        await signInWithEmailAndPassword(auth, email, password);
+      }
     } catch (err) {
-      setAuthError("Invalid credentials. Please check your email and password.");
+      setAuthError(err.message.includes("auth/") ? "Invalid credentials or email already in use." : err.message);
     } finally {
       setIsLoggingIn(false);
     }
@@ -127,9 +133,9 @@ export default function App() {
               width={64} 
               height={64} 
               className="h-16 w-auto rounded-xl shadow-sm mb-4 object-cover"
-              priority // Prioritizes loading this image above the fold
+              priority 
             />
-            <h1 className="text-2xl font-bold text-slate-900">Portal Login</h1>
+            <h1 className="text-2xl font-bold text-slate-900">{isSignUp ? "Create Account" : "Portal Login"}</h1>
           </div>
           
           {authError && <div className="p-3 mb-6 bg-red-50 text-red-600 text-sm rounded-xl">{authError}</div>}
@@ -141,7 +147,7 @@ export default function App() {
 
           <div className="flex items-center gap-4 mb-6"><div className="h-px bg-slate-200 flex-1"></div><span className="text-xs text-slate-400 font-medium uppercase tracking-wider">Or Email</span><div className="h-px bg-slate-200 flex-1"></div></div>
 
-          <form onSubmit={handleEmailLogin} className="space-y-5">
+          <form onSubmit={handleEmailAuth} className="space-y-5">
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
               <input type="email" required className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -150,8 +156,18 @@ export default function App() {
               <label className="block text-sm font-medium text-slate-700 mb-1">Password</label>
               <input type="password" required className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
-            <button type="submit" disabled={isLoggingIn} className="w-full bg-slate-900 text-white font-semibold py-3.5 rounded-xl hover:bg-slate-800 transition-all">{isLoggingIn ? "Logging in..." : "Secure Login"}</button>
+            <button type="submit" disabled={isLoggingIn} className="w-full bg-slate-900 text-white font-semibold py-3.5 rounded-xl hover:bg-slate-800 transition-all">
+              {isLoggingIn ? "Processing..." : (isSignUp ? "Sign Up" : "Secure Login")}
+            </button>
           </form>
+          
+          {/* Toggle between Login and Signup */}
+          <div className="mt-6 text-center">
+            <button type="button" onClick={() => setIsSignUp(!isSignUp)} className="text-sm text-blue-600 hover:underline font-medium">
+              {isSignUp ? "Already have an account? Log in" : "Need an account? Sign up"}
+            </button>
+          </div>
+
         </motion.div>
       </div>
     );
@@ -168,7 +184,6 @@ function AdminDashboard({ db, handleLogout }) {
   const [selectedClient, setSelectedClient] = useState(null);
   const [months, setMonths] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState(null);
-  
   const [monthForm, setMonthForm] = useState({});
   const [isSaving, setIsSaving] = useState(false);
 
@@ -191,7 +206,6 @@ function AdminDashboard({ db, handleLogout }) {
   
   useEffect(() => {
     if (!selectedClient) return;
-
     const unsub = onSnapshot(
       collection(db, "clients", selectedClient.id, "months"),
       (snap) => {
@@ -200,23 +214,14 @@ function AdminDashboard({ db, handleLogout }) {
         setMonths(mList);
       }
     );
-
     return () => unsub();
   }, [selectedClient, db]);   
-
-  function clearSelectedClient() {
-    setSelectedClient(null);
-    setMonths([]);
-    setSelectedMonth(null);
-  }
 
   const createClient = async () => {
     const clientEmail = prompt("Enter the Client's Google Email Address:");
     if (!clientEmail) return;
-    
     const clientName = prompt("Enter the Client's Company/Name:");
     if (!clientName) return;
-
     const safeEmail = clientEmail.toLowerCase().trim();
     
     await setDoc(doc(db, "clients", safeEmail), {
@@ -410,17 +415,32 @@ function ClientDashboard({ user, db, handleLogout }) {
   useEffect(() => {
     const clientEmail = user.email.toLowerCase();
     
-    const unsubClient = onSnapshot(doc(db, "clients", clientEmail), (docSnap) => {
-      if (docSnap.exists()) setClientData(docSnap.data());
-    });
+    // FIX: Added error handlers to the onSnapshot listeners so a DB failure disables the loading screen
+    const unsubClient = onSnapshot(
+      doc(db, "clients", clientEmail), 
+      (docSnap) => {
+        if (docSnap.exists()) setClientData(docSnap.data());
+      },
+      (error) => {
+        console.error("Failed to load client profile:", error);
+        setLoading(false);
+      }
+    );
 
-    const unsubMonths = onSnapshot(collection(db, "clients", clientEmail, "months"), (snap) => {
-      const mList = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      mList.sort((a, b) => b.id.localeCompare(a.id)); 
-      setMonths(mList);
-      if (mList.length > 0 && !selectedMonthId) setSelectedMonthId(mList[0].id);
-      setLoading(false);
-    });
+    const unsubMonths = onSnapshot(
+      collection(db, "clients", clientEmail, "months"), 
+      (snap) => {
+        const mList = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        mList.sort((a, b) => b.id.localeCompare(a.id)); 
+        setMonths(mList);
+        if (mList.length > 0 && !selectedMonthId) setSelectedMonthId(mList[0].id);
+        setLoading(false);
+      },
+      (error) => {
+        console.error("Failed to load client months:", error);
+        setLoading(false);
+      }
+    );
 
     return () => { unsubClient(); unsubMonths(); };
   }, [user, selectedMonthId, db]);
@@ -453,7 +473,7 @@ function ClientDashboard({ user, db, handleLogout }) {
       <main className="flex-1 md:ml-64 p-6 lg:p-10 max-w-7xl">
         <div className="md:hidden flex items-center justify-between bg-white p-4 rounded-2xl shadow-sm mb-6 border border-slate-100">
           <Image 
-            src="/Vyoma.jpg" 
+            src="/icon.png" 
             alt="Vyoma" 
             width={32} 
             height={32} 
@@ -464,7 +484,7 @@ function ClientDashboard({ user, db, handleLogout }) {
 
         <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8">
           <div>
-            <h2 className="text-3xl font-bold text-slate-900 mb-2 tracking-tight">Welcome, {clientData?.name}</h2>
+            <h2 className="text-3xl font-bold text-slate-900 mb-2 tracking-tight">Welcome, {clientData?.name || user.email.split("@")[0]}</h2>
             <p className="text-slate-500 text-sm">Here is your digital performance and task breakdown.</p>
           </div>
           <div className="flex flex-wrap items-center gap-4">
@@ -498,7 +518,7 @@ function ClientDashboard({ user, db, handleLogout }) {
                     { t: "Posts", v: perf.totalPosts, i: ImageIcon, c: "text-blue-600", bg: "bg-blue-50" },
                     { t: "Reels", v: perf.reels, i: PlayCircle, c: "text-purple-600", bg: "bg-purple-50" },
                     { t: "Reach", v: perf.reach?.toLocaleString(), i: Users, c: "text-amber-600", bg: "bg-amber-50" },
-                    { t: "Engagement", v: `${perf.engagement}%`, i: TrendingUp, c: "text-emerald-600", bg: "bg-emerald-50" },
+                    { t: "Engagement", v: `${perf.engagement}+`, i: TrendingUp, c: "text-emerald-600", bg: "bg-emerald-50" },
                   ].map((s, idx) => (
                     <div key={idx} className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col group">
                       <div className={`w-12 h-12 ${s.bg} ${s.c} rounded-2xl flex items-center justify-center mb-4`}><s.i className="w-6 h-6" /></div>
