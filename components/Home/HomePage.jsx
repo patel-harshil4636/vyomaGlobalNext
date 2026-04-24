@@ -131,11 +131,35 @@ export default function VyomaGlobal() {
       >
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12 h-20 flex items-center justify-between">
           <div className="text-xl font-bold text-blue-600 tracking-tight cursor-pointer">VyomaGlobal</div>
-          <nav className="hidden md:flex gap-10 text-[13px] font-semibold tracking-wide text-slate-500">
-            {['Features', 'Portfolio', 'Testimonials', 'About Us', 'Contact'].map((item) => (
-              <a key={item} href={`#${item.toLowerCase().replace(' ', '-')}`} className="hover:text-slate-900 transition-colors">{item}</a>
-            ))}
-          </nav>
+        <nav className="hidden md:flex items-center gap-10 text-[13px] font-semibold tracking-wide text-slate-500">
+  {[
+
+
+    // Pricing page navigation
+    { name: "Pricing", href: "/price", isPage: false },
+
+    { name: "Contact", href: "#contact" },
+  ].map((item) =>
+    item.isPage ? (
+      <Link
+        key={item.name}
+        href={item.href}
+        className="text-blue-600 font-bold hover:text-blue-700 transition-all duration-300 relative group"
+      >
+        {item.name}
+        <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+      </Link>
+    ) : (
+      <a
+        key={item.name}
+        href={item.href}
+        className="hover:text-slate-900 transition-colors duration-300"
+      >
+        {item.name}
+      </a>
+    )
+  )}
+</nav>
           <div className="flex items-center gap-6">
             <MagneticButton as={Link} href="/clients" className="bg-blue-600 text-white px-6 py-2.5 rounded-full text-[13px] font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/20 block">
               Login
