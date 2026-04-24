@@ -179,6 +179,8 @@ export default function App() {
 // ==========================================
 // ADMIN DASHBOARD
 // ==========================================
+
+
 function AdminDashboard({ db, handleLogout }) {
   const [clients, setClients] = useState([]);
   const [selectedClient, setSelectedClient] = useState(null);
